@@ -7,91 +7,67 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --primary-green: #10B981;
-            --light-green: #ECFDF5;
-            --dark-green: #047857;
-        }
-        
         body {
-            background: linear-gradient(135deg, #F0FFF4 0%, #FFFFFF 100%);
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
+            background: #f8f9fa;
             display: flex;
             align-items: center;
+            justify-content: center;
+            min-height: 100vh;
         }
         
         .register-container {
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--light-green);
-            overflow: hidden;
-        }
-        
-        .register-header {
-            background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
-            color: white;
             padding: 2rem;
-            text-align: center;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
-            border: none;
-            padding: 12px;
-            font-weight: 600;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="register-container">
-                    <div class="register-header">
-                        <h2><i class="fas fa-leaf me-2"></i>YeşilDoğa</h2>
-                        <p class="mb-0">Yeni hesap oluşturun</p>
+    <div class="register-container">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-leaf text-success me-2"></i>Kayıt Ol
+        </h2>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }}">
+                        {{ message }}
                     </div>
-                    
-                    <div class="p-4">
-                        {% with messages = get_flashed_messages(with_categories=true) %}
-                            {% if messages %}
-                                {% for category, message in messages %}
-                                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show">
-                                        {{ message }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        {% endwith %}
-                        
-                        <form method="POST">
-                            <div class="mb-3">
-                                <label class="form-label">E-posta</label>
-                                <input type="email" name="email" class="form-control" required>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label">Şifre</label>
-                                <input type="password" name="password" class="form-control" required>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label">Şifre Tekrar</label>
-                                <input type="password" name="confirm_password" class="form-control" required>
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary w-100 mb-3">Kayıt Ol</button>
-                            
-                            <div class="text-center">
-                                <a href="/login" class="text-decoration-none">Zaten hesabınız var mı? Giriş yapın</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label">Ad Soyad</label>
+                <input type="text" name="full_name" class="form-control" required>
             </div>
-        </div>
+            
+            <div class="mb-3">
+                <label class="form-label">E-posta</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Şifre</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Şifre Tekrar</label>
+                <input type="password" name="confirm_password" class="form-control" required>
+            </div>
+            
+            <button type="submit" class="btn btn-success w-100 mb-3">Kayıt Ol</button>
+            
+            <div class="text-center">
+                <a href="/login">Zaten hesabınız var mı? Giriş yapın</a>
+            </div>
+        </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
