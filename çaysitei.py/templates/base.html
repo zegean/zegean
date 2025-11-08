@@ -1,0 +1,32 @@
+BASE_TEMPLATE = """
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{{ title or "Site" }}</title>
+<style>
+  body {background:#fff;color:#111;font-family:Inter,sans-serif;margin:0;padding:20px;}
+  .neon-btn {
+    background: linear-gradient(90deg, #922BFF, #C82CFF);
+    color:white;padding:10px 18px;border-radius:12px;border:none;
+    font-weight:600;box-shadow:0 6px 18px rgba(146,43,255,0.16),0 0 24px rgba(146,43,255,0.12) inset;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .neon-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(146,43,255,0.22);}
+  .container{max-width:900px;margin:24px auto}
+</style>
+</head>
+<body>
+<div class="container">
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for cat,msg in messages %}
+      <div>{{msg}}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+{% block content %}{% endblock %}
+</div>
+</body>
+</html>
+"""

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sepetim - YeşilDoğa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-green: #10B981;
+            --light-green: #ECFDF5;
+            --dark-green: #047857;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #F0FFF4 0%, #FFFFFF 100%);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+        
+        .cart-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--light-green);
+        }
+        
+        .cart-item {
+            border-bottom: 1px solid var(--light-green);
+            padding: 1.5rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .quantity-btn {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .checkout-btn {
+            background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+            border: none;
+            padding: 15px 30px;
+            font-weight: 600;
+            border-radius: 25px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="fw-bold mb-4" style="color: var(--dark-green);">
+                    <i class="fas fa-shopping-cart me-2"></i>Sepetim
+                </h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="cart-container p-4">
+                    {% if cart_items %}
+                        {% for item in cart_items %}
+                        <div class="cart-item">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    <div class="product-image-small bg-light rounded d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                        <i class="fas fa-wine-bottle text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="fw-bold mb-1">{{ item.name }}</h6>
+                                    <small class="text-muted">Stok: {{ item.stock }}</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <span class="fw-bold text-success">{{ item.price }} TL</span>
+                                </div>
+                                <div class="col-md-2">
+                                    <span class="fw-bold">Adet: {{ item.quantity }}</span>
+                                </div>
+                                <div class="col-md-2">
+                                    <span class="fw-bold text-dark">{{ item.price * item.quantity }} TL</span>
+                                </div>
+                                <div class="col-md-1">
+                                    <a href="/remove_from_cart/{{ item.id }}" class="btn btn-outline-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                            <h4 class="text-muted">Sepetiniz boş</h4>
+                            <p class="text-muted">Alışverişe başlamak için ürünleri sepete ekleyin.</p>
+                            <a href="/" class="btn btn-success">Alışverişe Başla</a>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Sipariş Formu -->
+                {% if cart_items %}
+                <div class="cart-container p-4 mt-4">
+                    <h5 class="fw-bold mb-4">Sipariş Bilgileri</h5>
+                    <form method="POST" action="/create_order">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Ad Soyad</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Telefon</label>
+                                <input type="tel" name="phone" class="form-control" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label class="form-label">Adres</label>
+                                <textarea name="address" class="form-control" rows="3" required></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn checkout-btn w-100">
+                            <i class="fas fa-credit-card me-2"></i>Siparişi Tamamla
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-lg-4">
+                <div class="cart-container p-4">
+                    <h5 class="fw-bold mb-4">Sipariş Özeti</h5>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Ara Toplam:</span>
+                        <span class="fw-bold">{{ total }} TL</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Kargo:</span>
+                        <span class="fw-bold text-success">Ücretsiz</span>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="fw-bold">Toplam:</span>
+                        <span class="fw-bold text-success fs-5">{{ total }} TL</span>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-lock me-1"></i>Güvenli ödeme ile 256-bit SSL şifreleme
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
